@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web FastKitchen</title>
+    <link href="../css/search.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-left">
+                <a href="/" class="brand-wrap"> 
+                    <span class="logo-emoji">👨🏼‍🍳</span>
+                    <span class="brand-name">FastKitchen</span>
+                </a>
+            </div>
+
+            <div class="nav-right">
+                <div class="notification-toggle " id="notificationToggle">
+                    <span>🔔</span>
+                </div>
+                <div class="menu-toggle " id="menuToggle">
+                    <span>&#9776;</span>
+                </div>
+            </div>
+
+            <div class="notification-menu" id="notificationMenu">
+                <div class="notification-header">Thông báo</div>
+                <a href="#" class="notification-item">Đơn hàng mới từ bạn</a>
+                <a href="#" class="notification-item">Đơn hàng đang chuẩn bị</a>
+                <a href="#" class="notification-item">Đơn hàng sẵn sàng giao</a>
+                <div class="divider"></div>
+                <a href="#" class="notification-item">Xem tất cả thông báo</a>
+            </div>
+
+            <div class="dropdown-menu" id="myDropdown">
+                <a href="/" class="menu-item" id="menuHome">Trang chủ</a> 
+                <a href="#" class="menu-item" id="menuServiceRegister">Đăng ký dịch vụ</a>
+                <a href="#" class="menu-item hidden" id="menuYourService">Dịch vụ của bạn</a>
+                <a href="#" class="menu-item">Lịch sử hoạt động</a>
+                <a href="#" class="menu-item">Tổng đài hỗ trợ</a>
+                <a href="#" class="menu-item">Chính sách bảo mật</a>
+                <a href="#" class="menu-item" id="menuSettings">Cài đặt</a>
+               
+                <div class="divider"></div> <a href="#" class="menu-item">Giới thiệu</a>
+                <a href="#" class="menu-item">Liên hệ</a>
+                <div class="divider"></div>
+                <a href="#" class="menu-item logout-item" id="logoutBtn">Đăng xuất</a> 
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="search-controls">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm dịch vụ (ví dụ: nấu ăn, dọn nhà)...">
+            <select id="categoryFilter">
+                <option value="all">Tất cả danh mục</option>
+                </select>
+            <select id="ratingFilter">
+                <option value="all">Tất cả đánh giá</option>
+                </select>
+        </section>
+
+        <section class="service-list" id="serviceList">
+            </section>
+
+        <div id="noResults" class="no-results hidden">
+            Không tìm thấy kết quả phù hợp.
+        </div>
+    </main>
+
+    <div id="serviceDetailModal" class="modal">
+        <div class="modal-content form-modal" style="max-width: 800px !important;">
+            <span class="close" onclick="closeModalById('serviceDetailModal')">&times;</span>
+            <div class="modal-body">
+                <h2 style="text-align: center; margin-bottom: 20px;">Tên dịch vụ chi tiết</h2>
+                <div style="display: flex; gap: 20px;">
+                    <img id="detailImage" src="" alt="Dịch vụ" style="width: 50%; height: auto; object-fit: cover;">
+                    <div style="width: 50%;">
+                         <p id="detailDesc" style="margin-bottom: 15px;"></p>
+                        <p id="detailPrice" style="font-size: 1.5rem; font-weight: bold; color: #cc0000; margin-bottom: 10px;"></p>
+                        <p id="detailRating" style="font-size: 1.2rem; color: #ff9900; margin-bottom: 20px;"></p>
+                        <a href="#" class="btn-order" style="display: block; text-align: center;" onclick="alert('Đặt dịch vụ này!'); closeModalById('serviceDetailModal'); return false;">Đặt ngay</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div id="complaintModal" class="modal">
+        <div class="modal-content form-modal">
+            <span class="close" onclick="closeModalById('complaintModal')">&times;</span>
+            <div class="form-body">
+                <h2><i class="fas fa-exclamation-circle"></i> Khiếu nại dịch vụ</h2>
+                <p id="targetService" style="text-align: center; margin-bottom: 15px; font-weight: bold; color: var(--color-primary);"></p>
+                <form onsubmit="handleComplaint(event)">
+                    <div class="form-group">
+                        <label>Vấn đề gặp phải</label>
+                        <select id="complaintType">
+                            <option>Thái độ nhân viên</option>
+                            <option>Chất lượng không đạt yêu cầu</option>
+                            <option>Sai giờ giấc</option>
+                            <option>Vấn đề thanh toán</option>
+                            <option>Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Chi tiết</label>
+                        <textarea id="complaintDetails" rows="4" placeholder="Mô tả vấn đề..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Gửi Khiếu Nại</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <footer>
+        <p>&copy; 2025 FastKitchen. Khởi đầu mới.</p>
+    </footer>
+    <script src="../js/search.js"></script>
+</body>
+</html>

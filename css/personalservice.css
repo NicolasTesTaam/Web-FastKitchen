@@ -1,0 +1,615 @@
+/*CSS Sơ khai*/
+/*===============================*/
+/* Thiết lập cơ bản */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f9;
+}
+
+.service-page-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Header - Thông tin Chủ Dịch Vụ */
+.service-owner-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #e9eff2;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.owner-details h1 {
+    margin-top: 0;
+    font-size: 1.8em;
+    color: #333;
+}
+
+.interaction-icons .icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    margin-left: 15px;
+    cursor: pointer;
+    color: #007bff; /* Màu xanh dương cho icon */
+    transition: color 0.2s;
+}
+
+.interaction-icons .icon-btn:hover {
+    color: #0056b3;
+}
+
+/* Thanh Tabs */
+.service-tabs {
+    display: flex;
+    border-bottom: 2px solid #ccc;
+}
+
+.tab-link {
+    background-color: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.tab-link:hover {
+    background-color: #ddd;
+}
+
+.tab-link.active {
+    border-bottom: 3px solid #007bff;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Nội dung Tabs */
+.tab-content {
+    padding: 20px;
+    display: none; /* Mặc định ẩn, JS sẽ xử lý hiển thị */
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.combo-menu-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.price {
+    color: #dc3545; /* Màu đỏ cho giá tiền */
+    font-weight: bold;
+}
+
+/* Nút Đặt Tiệc Cố Định */
+.fixed-actions {
+    padding: 15px 20px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    background-color: #f8f8f8;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.primary-btn {
+    background-color: #28a745; /* Màu xanh lá cho nút đặt */
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+    transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: #1e7e34;
+}
+/*CSS cho Modal Đặt Tiệc*/
+/*===============================*/
+/* === Modal (Hộp thoại) === */
+.modal {
+    display: none; /* Mặc định ẩn modal */
+    position: fixed;
+    z-index: 1000; /* Đảm bảo modal nằm trên cùng */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* Đặt modal ở giữa màn hình */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* === Thanh Tiến Trình (Progress Bar) === */
+.progress-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+.progress-bar .step {
+    flex-grow: 1;
+    text-align: center;
+    padding: 10px 0;
+    color: #999;
+    border-bottom: 3px solid #ccc;
+    font-weight: bold;
+    position: relative;
+}
+
+.progress-bar .step.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+}
+
+/* === Các Form Steps === */
+.form-step {
+    display: none; /* Ẩn các bước mặc định */
+}
+
+.form-step.active {
+    display: block;
+}
+
+/* Form Groups & Input */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input, .choice-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Quan trọng để padding không làm tăng chiều rộng */
+}
+
+/* Tùy chọn món (Form 1) */
+.choice-group {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+}
+
+.choice-group.separator {
+    text-align: center;
+    border: none;
+    padding: 5px 0;
+}
+
+.dish-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.add-dish-btn {
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.selected-dish {
+    font-style: italic;
+    color: #28a745;
+    font-size: 0.9em;
+}
+
+/* Thanh điều hướng Form */
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.secondary-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.secondary-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Tùy chọn Thanh toán (Form 3) */
+.payment-option {
+    display: block;
+    border: 1px solid #007bff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #e6f0ff;
+}
+
+.payment-option input[type="radio"] {
+    margin-right: 10px;
+}
+
+.transfer-details {
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #007bff;
+    font-size: 0.9em;
+}
+
+.transfer-details .note {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/*CSS Bổ Sung cho Chủ Dịch Vụ   */
+/* === OWNER VIEW STYLES === */
+.owner-dashboard-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+/* Thanh Tabs Chủ Dịch Vụ */
+.owner-management-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.owner-tab-link {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    margin-right: 5px;
+    border-radius: 5px 5px 0 0;
+    font-weight: normal;
+    transition: background-color 0.3s;
+}
+
+.owner-tab-link.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.owner-tab-content {
+    display: none;
+    padding: 10px 0;
+}
+
+.owner-tab-content.active {
+    display: block;
+}
+
+/* Bảng Dữ liệu (Tables) */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.data-table th, .data-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Nút Thao tác trong bảng */
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    margin-right: 5px;
+}
+
+.edit-btn { color: #ffc107; }
+.delete-btn { color: #dc3545; }
+.detail-btn, .update-btn { color: #007bff; }
+
+/* Filter Đơn hàng */
+.order-status-filter .status-btn {
+    padding: 8px 15px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+}
+
+.order-status-filter .status-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Trạng thái đơn hàng */
+.status-tag {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: white;
+}
+.status-tag.new { background-color: #dc3545; } /* Chưa nhận: Đỏ */
+.status-tag.inprogress { background-color: #ffc107; } /* Đang làm: Vàng */
+.status-tag.completed { background-color: #28a745; } /* Hoàn thành: Xanh lá */
+
+/* Báo cáo Thống kê */
+.stats-table tr:nth-child(even) { background-color: #f9f9f9; }
+.chart-container {
+    height: 300px; 
+    margin-top: 20px;
+    border: 1px dashed #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal nhỏ cho Thông tin Khách hàng */
+.small-modal {
+    max-width: 400px !important;
+}
+/* ======================================================== */
+/* CSS TỪ TES.CSS (DÀNH CHO HEADER, FOOTER, VÀ NAVBAR) */
+/* ======================================================== */
+
+/* css/header.css */
+
+/* Định kiểu cho phần tử HEADER */
+header {
+    /* Ví dụ: màu nền, đổ bóng, vị trí cố định */
+    background-color: #4A606F; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+/* Định kiểu cho thương hiệu và logo */
+.brand-wrap {
+    /* Ví dụ: căn chỉnh, khoảng cách */
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.logo-emoji {
+    /* Ví dụ: kích thước emoji */
+    font-size: 2rem;
+    margin-right: 5px;
+}
+/* ... Thêm các CSS khác cho header ... */
+/* css/navbar.css */
+
+/* Định kiểu cho thanh điều hướng chính */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Định kiểu cho nút Menu/Notification */
+.menu-toggle, .notification-toggle {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-left: 15px; 
+    transition: background-color 0.2s;
+}
+
+.menu-toggle:hover, .notification-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Định kiểu cho Dropdown Menu (Chung) */
+.dropdown-menu, .notification-menu {
+    position: absolute;
+    top: 100%; /* Đặt ngay dưới header */
+    right: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 250px;
+    max-width: 90%;
+    z-index: 100;
+    
+    /* Mặc định ẩn */
+    display: none; 
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* Hiển thị khi có class 'show' */
+.dropdown-menu.show, .notification-menu.show {
+    display: block; 
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Định kiểu cho các mục trong Dropdown */
+.menu-item, .notification-item {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s, transform 0.2s;
+    font-size: 0.95rem;
+}
+
+/* Định kiểu cho nút Đăng nhập/Đăng ký */
+.auth-buttons {
+    margin-left: 20px;
+}
+
+.auth-buttons button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+    transition: background-color 0.2s;
+}
+
+#loginBtn {
+    background-color: #007bff;
+    color: white;
+}
+
+#signupBtn {
+    background-color: #28a745;
+    color: white;
+}
+
+#loginBtn:hover {
+    background-color: #0056b3;
+}
+
+#signupBtn:hover {
+    background-color: #1e7e34;
+}
+
+/* Utility Class */
+.hidden {
+    display: none !important;
+}
+
+/* css/footer.css */
+
+/* Định kiểu cho Footer */
+footer {
+    background-color: #343a40; /* Màu nền tối */
+    color: #f8f9fa; /* Màu chữ sáng */
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.85rem;
+    width: 100%;
+    margin-top: 20px; /* Khoảng cách với nội dung phía trên */
+}
+
+
+/* BỔ SUNG: Hiệu ứng Zoom nhẹ khi Hover */
+.menu-item:hover, .notification-item:hover {
+    /* Giữ lại các thuộc tính hover đã có */
+    background-color: #e6f7ff;
+    color: #007bff;
+    
+    /* Thêm hiệu ứng zoom */
+    transform: scale(1.02); /* Zoom lên 2% */
+    /* Đảm bảo transition đã được thiết lập ở trạng thái bình thường */
+}
+/* BỔ SUNG: Định kiểu cho Notification Header */
+.notification-menu .notification-header {
+    font-weight: bold;
+    padding: 15px 20px 10px 20px;
+    border-bottom: 1px solid #eee;
+    color: #4A606F; /* Sử dụng màu header */
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+/* BỔ SUNG: Định kiểu cho Divider */
+.notification-menu .divider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 5px 0;
+}
+
+/* Định kiểu cho nút Đăng xuất (cải tiến) */
+.logout-item {
+    border-top: 1px solid #eee;
+    color: #dc3545; /* Màu đỏ tiêu chuẩn cho hành động nguy hiểm */
+    font-weight: bold;
+}

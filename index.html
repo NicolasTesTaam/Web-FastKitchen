@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web FastKitchen</title>
+    <link href="css/index.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            
+            <div class="nav-left">
+                <div class="brand-wrap"> 
+                    <span class="logo-emoji">👨🏼‍🍳</span>
+                    <span class="brand-name">FastKitchen</span>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <a href="#" class="nav-link log-in" id="loginBtn">Đăng nhập</a>
+                <a href="#" class="nav-link sign-up" id="signupBtn">Đăng ký</a>
+                <div class="notification-toggle hidden" id="notificationToggle">
+                    <span>🔔</span>
+                </div>
+                <div class="menu-toggle hidden" id="menuToggle">
+                    <span>&#9776;</span>
+                </div>
+            </div>
+
+            <div class="notification-menu" id="notificationMenu">
+                <div class="notification-header">Thông báo</div>
+                <a href="#" class="notification-item">Đơn hàng mới từ bạn</a>
+                <a href="#" class="notification-item">Đơn hàng đang chuẩn bị</a>
+                <a href="#" class="notification-item">Đơn hàng sẵn sàng giao</a>
+                <div class="divider"></div>
+                <a href="#" class="notification-item">Xem tất cả thông báo</a>
+            </div>
+
+            <div class="dropdown-menu" id="myDropdown">
+                <a href="/" class="menu-item" id="menuHome">Trang chủ</a> 
+                <a href="#" class="menu-item">Tìm kiếm</a>
+                <a href="#" class="menu-item" id="menuServiceRegister">Đăng ký dịch vụ</a>
+                <a href="#" class="menu-item hidden" id="menuYourService">Dịch vụ của bạn</a>
+                <a href="#" class="menu-item">Lịch sử hoạt động</a>
+                <a href="#" class="menu-item">Tổng đài hỗ trợ</a>
+                
+               
+                <a href="#" class="menu-item">Chính sách bảo mật</a>
+                <a href="/html/setting.html" class="menu-item" id="menuSettings">Cài đặt</a> 
+                <a href="#" class="menu-item">Giới thiệu</a>
+                <a href="#" class="menu-item logout-item hidden" id="logoutBtn">Đăng xuất</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <!-- Div 1:Chào đón + Btn đặt tiệc  -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Chào mừng bạn đến FastKitchen</h1>
+                <p>Kết nối với Đầu Bếp gần bạn và tận hưởng bữa ăn hoàn hảo không cần vào bếp.</p>
+                <a href="#" class="btn-service" id="serviceBtn">Đặt dịch vụ ngay</a>
+            </div>
+        </section>
+
+        <!-- Div 2: Hướng dẫn sử dụng  -->
+        <section class="guide-section"> 
+            <h2>Hướng dẫn sử dụng FastKitchen</h2>
+            <div class="guide-container">
+                <div class="guide-step" onclick="openModal(this)">
+                    <img src="img/step1.jpg" alt="Bước 1">
+                    <h3>Bước 1</h3>
+                    <p>Mô tả bước 1</p>
+                </div>
+                <div class="guide-step" onclick="openModal(this)">
+                    <img src="img/step2.jpg" alt="Bước 2">
+                    <h3>Bước 2</h3>
+                    <p>Mô tả bước 2</p>
+                </div>
+                <div class="guide-step" onclick="openModal(this)">
+                    <img src="img/step3.jpg" alt="Bước 3">
+                    <h3>Bước 3</h3>
+                    <p>Mô tả bước 3</p>
+                </div>
+                <div class="guide-step" onclick="openModal(this)">
+                    <img src="img/step4.jpg" alt="Bước 4">
+                    <h3>Bước 4</h3>
+                    <p>Mô tả bước 4</p>
+                </div>
+                <div class="guide-step" onclick="openModal(this)">
+                    <img src="img/step5.jpg" alt="Bước 5">
+                    <h3>Bước 5</h3>
+                    <p>Mô tả bước 5</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Div 3: Đánh giá của người dùng -->
+        <section class="reviews-section">
+            <h2>Đánh giá từ khách hàng</h2>
+            <div class="reviews-container">
+                <!-- Đánh giá sẽ được thêm ở đây -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal phóng to hướng dẫn -->
+    <div id="stepModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="">
+                <h2 id="modalTitle"></h2>
+                <p id="modalDescription"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Đăng nhập -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content form-modal">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <div class="form-body">
+                <h2>Đăng nhập</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Mật khẩu</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Đăng ký -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content form-modal">
+            <span class="close" onclick="closeSignupModal()">&times;</span>
+            <div class="form-body">
+                <h2>Đăng ký</h2>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupName">Họ tên</label>
+                        <input type="text" id="signupName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Mật khẩu</label>
+                        <input type="password" id="signupPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupConfirm">Xác nhận mật khẩu</label>
+                        <input type="password" id="signupConfirm" name="confirm" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Đăng ký</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Đăng ký dịch vụ cá nhân -->
+    <div id="serviceRegisterModal" class="modal">
+        <div class="modal-content form-modal">
+            <span class="close" onclick="closeServiceRegisterModal()">&times;</span>
+            <div class="form-body">
+                <h2>Đăng ký dịch vụ cá nhân</h2>
+                <form id="serviceRegisterForm">
+                    <div class="form-group">
+                        <label for="serviceName">Tên dịch vụ</label>
+                        <input type="text" id="serviceName" name="service_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceCCCD">Số CCCD</label>
+                        <input type="text" id="serviceCCCD" name="cccd" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="servicePhone">Số điện thoại</label>
+                        <input type="tel" id="servicePhone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceAddress">Địa chỉ</label>
+                        <input type="text" id="serviceAddress" name="address" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Đăng ký dịch vụ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FastKitchen. Khởi đầu mới.</p>
+    </footer>
+    <script src="js/index.js"></script>
+</body>
+</html>

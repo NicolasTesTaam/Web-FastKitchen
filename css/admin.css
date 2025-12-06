@@ -1,0 +1,380 @@
+/* Thiết lập chung */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f7f9;
+    color: #333;
+}
+
+#dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 1. Sidebar (Thanh Điều Hướng) */
+#sidebar {
+    width: 250px;
+    background-color: #2c3e50; /* Màu nền tối */
+    color: white;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    text-align: center;
+    padding: 10px 0 30px 0;
+    border-bottom: 1px solid #34495e;
+}
+
+.logo h3 {
+    font-size: 1.5em;
+    color: #ecf0f1; /* Màu chữ sáng */
+}
+
+#sidebar nav ul {
+    list-style: none;
+    padding-top: 20px;
+}
+
+#sidebar nav ul li {
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    font-size: 1.05em;
+}
+
+#sidebar nav ul li i {
+    margin-right: 10px;
+}
+
+#sidebar nav ul li:hover,
+#sidebar nav ul li.active {
+    background-color: #34495e; /* Màu nền khi hover/active */
+    border-left: 5px solid #1abc9c; /* Đường kẻ highlight */
+    padding-left: 15px; /* Điều chỉnh lại padding */
+}
+
+/* 2. Main Content (Nội Dung Chính) */
+#main-content {
+    flex-grow: 1; /* Chiếm hết phần còn lại */
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+#main-content header {
+    background-color: white;
+    padding: 20px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#main-content header h1 {
+    font-size: 1.5em;
+    color: #2c3e50;
+}
+
+/* Content Area */
+#content-area {
+    padding: 30px;
+    flex-grow: 1;
+}
+
+/* Thẻ mẫu cho nội dung */
+.module-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+/* Styling cho các phần tử bên trong module */
+
+.module-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-add {
+    padding: 10px 15px;
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-add:hover {
+    background-color: #16a085;
+}
+
+/* Thanh Lọc và Tìm Kiếm */
+.filter-search {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filter-search input, .filter-search select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.filter-search input {
+    flex-grow: 1;
+}
+
+/* Bảng Dữ liệu */
+#user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#user-table thead th {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid #ddd;
+}
+
+#user-table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+#user-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Trạng Thái (Status Badges) */
+.status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.status.active {
+    background-color: #e8f8f5;
+    color: #1abc9c;
+}
+
+.status.locked {
+    background-color: #fdeaea;
+    color: #c0392b;
+}
+
+/* Nút Hành Động (Action Buttons) */
+.btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+    padding: 5px;
+    border-radius: 3px;
+    transition: color 0.2s;
+}
+
+.btn-action.view {
+    color: #3498db;
+}
+.btn-action.lock {
+    color: #e74c3c;
+}
+.btn-action.unlock {
+    color: #2ecc71;
+}
+
+.btn-action:hover {
+    opacity: 0.7;
+}
+
+
+/* css/header.css */
+
+/* Định kiểu cho phần tử HEADER */
+header {
+    /* Ví dụ: màu nền, đổ bóng, vị trí cố định */
+    background-color: #4A606F; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+/* Định kiểu cho thương hiệu và logo */
+.brand-wrap {
+    /* Ví dụ: căn chỉnh, khoảng cách */
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.logo-emoji {
+    /* Ví dụ: kích thước emoji */
+    font-size: 2rem;
+    margin-right: 5px;
+}
+/* ... Thêm các CSS khác cho header ... */
+/* css/navbar.css */
+
+/* Định kiểu cho thanh điều hướng chính */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Định kiểu cho Notification và Menu Toggle */
+.notification-toggle, .menu-toggle {
+    /* Ví dụ: kích thước, màu sắc, con trỏ */
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin-left: 15px;
+}
+
+/* Định kiểu cho Dropdown Menu và Notification Menu (CẢI TIẾN) */
+.dropdown-menu, .notification-menu {
+    position: absolute;
+    top: calc(100% + 10px); /* Lùi xuống 10px so với mép dưới header */
+    right: 20px;
+    background-color: #fff;
+    /* Đổ bóng rõ nét và dịu mắt hơn */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); 
+    border-radius: 8px; /* Bo góc mềm mại hơn */
+    width: 280px; /* Tăng chiều rộng một chút */
+    max-height: 400px; /* Giới hạn chiều cao */
+    overflow-y: auto; /* Cho phép cuộn nếu nhiều mục */
+    z-index: 999;
+    /* Hiệu ứng chuyển động mượt mà hơn khi hiện ra */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s;
+    /* Loại bỏ đường viền thừa */
+    border: 1px solid #e0e0e0;
+}
+
+/* Class 'show' được thêm bằng JS (CẢI TIẾN) */
+.dropdown-menu.show, .notification-menu.show {
+    /* Thay vì display: block, dùng các thuộc tính để kích hoạt transition */
+    display: block; /* Giữ lại để đảm bảo không có vấn đề tương thích */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Định kiểu cho các mục trong menu (CẬP NHẬT TRANSITION) */
+.menu-item, .notification-item {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.95rem;
+    /* Thêm 'transform' vào transition để zoom mượt mà */
+    transition: background-color 0.15s ease-in-out, 
+                color 0.15s ease-in-out, 
+                transform 0.2s ease-out; /* Bổ sung transform */
+}
+
+.menu-item:hover, .notification-item:hover {
+    background-color: #e6f7ff; 
+    color: #007bff; 
+    
+    /* Hiệu ứng Zoom: Đẩy đối tượng lên 1.02 lần kích thước ban đầu */
+    transform: scale(1.02); 
+    /* Dùng 'position: relative;' và 'z-index' để đảm bảo mục zoom không bị che khuất */
+    position: relative;
+    z-index: 1000;
+}
+
+.logout-item {
+    /* Ví dụ: làm nổi bật nút đăng xuất */
+    border-top: 1px solid #eee;
+    color: red;
+}
+/* BỔ SUNG: Hiệu ứng Zoom nhẹ khi Hover */
+.menu-item:hover, .notification-item:hover {
+    /* Giữ lại các thuộc tính hover đã có */
+    background-color: #e6f7ff;
+    color: #007bff;
+    
+    /* Thêm hiệu ứng zoom */
+    transform: scale(1.02); /* Zoom lên 2% */
+    /* Đảm bảo transition đã được thiết lập ở trạng thái bình thường */
+}
+/* BỔ SUNG: Định kiểu cho Notification Header */
+.notification-menu .notification-header {
+    font-weight: bold;
+    padding: 15px 20px 10px 20px;
+    border-bottom: 1px solid #eee;
+    color: #4A606F; /* Sử dụng màu header */
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+/* BỔ SUNG: Định kiểu cho Divider */
+.notification-menu .divider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 5px 0;
+}
+
+/* Định kiểu cho nút Đăng xuất (cải tiến) */
+.logout-item {
+    border-top: 1px solid #eee;
+    color: #dc3545; /* Màu đỏ tiêu chuẩn cho hành động nguy hiểm */
+    font-weight: bold;
+}
+
+.logout-item:hover {
+    background-color: #f8d7da !important; /* Màu nền đỏ nhạt khi hover */
+    color: #721c24 !important;
+}
+/* css/footer.css */
+
+/* Định kiểu cho phần tử FOOTER */
+footer {
+    /* Ví dụ: màu nền, màu chữ, căn giữa, padding */
+    background-color: #4A606F;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px; /* Khoảng cách với nội dung chính */
+    width: 100%;
+}
+
+body {
+    overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+}

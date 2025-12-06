@@ -1,0 +1,427 @@
+/* Color Palette Variables (Giữ nguyên từ index.css) */
+:root {
+    --color-primary: #4A606F; /* Xanh đậm */
+    --color-secondary: #9CAAB8; /* Xanh nhạt/Xám */
+    --color-bg: #F3F0EC; /* Nền be nhạt */
+    --color-text: #333333; /* Chữ đậm */
+    --color-accent: #DCCFC5; /* Màu nhấn be */
+    --color-success: #4CAF50; /* Thêm màu success */
+    --color-error: #F44336; /* Thêm màu error */
+}
+
+/* Reset cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--color-bg);
+    padding-top: 70px; /* Bù trừ cho header cố định */
+    color: var(--color-text);
+}
+
+/* Tiện ích */
+.hidden {
+    display: none !important;
+}
+
+/* ========================================================================= */
+/* ===== HEADER & FOOTER (ĐỒNG BỘ CSS TỪ index.css - Chỉ giữ lại phần cần thiết) ===== */
+/* ========================================================================= */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--color-primary); 
+}
+
+.brand-wrap {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-emoji {
+    font-size: 1.8rem;
+    margin-right: 10px;
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white; /* Màu chữ trắng trên nền đậm */
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Style cho Toggle Buttons */
+.notification-toggle, .menu-toggle {
+    font-size: 1.2rem;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+    color: var(--color-bg); 
+    user-select: none;
+}
+
+.notification-toggle:hover, .menu-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.notification-toggle span, .menu-toggle span {
+    display: inline-block;
+    font-size: 1.2rem;
+}
+
+.dropdown-menu, .notification-menu {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 1010;
+    display: none;
+    overflow: hidden;
+}
+
+.dropdown-menu.active, .notification-menu.active {
+    display: block;
+}
+
+.menu-item, .notification-item {
+    display: block;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: background-color 0.2s;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-item:hover, .notification-item:hover {
+    background-color: var(--color-bg);
+}
+
+.notification-header {
+    font-weight: bold;
+    padding: 12px 15px;
+    border-bottom: 2px solid var(--color-accent);
+    color: var(--color-primary);
+}
+
+.divider {
+    height: 1px;
+    background-color: #eee;
+}
+
+footer {
+    background-color: var(--color-primary);
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    margin-top: 40px;
+}
+
+/* ========================================================================= */
+/* ===== MAIN SETTINGS LAYOUT & COMPONENTS (CUSTOM STYLE) ===== */
+/* ========================================================================= */
+
+.settings-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 20px;
+}
+
+/* Sidebar Navigation */
+.settings-sidebar {
+    flex: 0 0 250px; 
+    padding: 20px 0;
+    border-right: 1px solid var(--color-accent);
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    color: var(--color-text);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.sidebar-item i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+    color: var(--color-secondary);
+}
+
+.sidebar-item.active {
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    border-left: 4px solid var(--color-primary);
+}
+
+.sidebar-item.active i {
+    color: var(--color-primary);
+}
+
+.sidebar-item:hover:not(.active) {
+    background-color: #f9f9f9;
+}
+
+/* Content Area */
+.settings-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* Section Title */
+.section-title {
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+/* ===== FORM STYLES & INPUTS ===== */
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    color: var(--color-text);
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+.form-group input, .form-group select {
+    padding: 10px;
+    border: 1px solid var(--color-secondary);
+    border-radius: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-size: 1rem;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(74, 96, 111, 0.1);
+    outline: none;
+}
+
+.btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Khoảng cách giữa icon và chữ */
+    padding: 10px 20px;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 10px;
+    max-width: fit-content; /* Giúp nút không kéo dài toàn bộ chiều rộng */
+}
+
+.btn-submit:hover {
+    background-color: #384C58;
+}
+
+.btn-submit:active {
+    transform: scale(0.99);
+}
+
+/* Thông báo cá nhân */
+.info-message {
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: center;
+    display: none;
+}
+
+.info-message.success {
+    background-color: #e8f5e9; /* Light green background */
+    color: var(--color-success);
+    display: block;
+}
+
+.info-message.error {
+    background-color: #ffebee; /* Light red background */
+    color: var(--color-error);
+    display: block;
+}
+
+/* Phần quên mật khẩu */
+.forgot-password-link {
+    display: block;
+    margin-top: 10px;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.forgot-password-link i {
+    margin-right: 5px;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
+
+/* Tùy chỉnh Thông báo */
+.notification-setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.notification-setting:last-child {
+    border-bottom: none;
+}
+
+.setting-info {
+    flex-grow: 1;
+}
+
+.setting-info p {
+    font-size: 0.9rem;
+    color: var(--color-secondary);
+}
+
+/* Switch Toggle (Cần thiết cho trang cài đặt thông báo) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 25px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-secondary);
+  transition: .4s;
+  border-radius: 25px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 17px;
+  width: 17px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--color-primary);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+
+/* ===== RESPONSIVE DESIGN (Điều chỉnh lại navbar cho mobile) ===== */
+@media (max-width: 768px) {
+    .settings-container {
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    /* Sidebar cuộn ngang */
+    .settings-sidebar {
+        flex: none;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--color-accent);
+        overflow-x: auto;
+        white-space: nowrap; 
+        padding: 0;
+    }
+
+    .sidebar-item {
+        display: inline-flex; /* Hiển thị các mục theo hàng ngang */
+        border-left: none !important;
+        border-bottom: 2px solid transparent;
+    }
+
+    .sidebar-item.active {
+        border-bottom: 2px solid var(--color-primary);
+        border-left: none !important;
+    }
+
+    .settings-content {
+        padding: 10px 5px;
+    }
+
+    .navbar {
+        padding: 10px; 
+    }
+
+    .dropdown-menu, .notification-menu {
+        right: 10px; 
+    }
+}

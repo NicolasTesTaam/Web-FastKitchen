@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web FastKitchen - Cài đặt</title>
+    <link href="../css/setting.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+
+            <div class="nav-left">
+                <div class="brand-wrap">
+                    <span class="logo-emoji">👨🏼‍🍳</span>
+                    <span class="brand-name">FastKitchen</span>
+                </div>
+            </div>
+
+            <div class="nav-right">
+
+                <div class="notification-toggle hidden" id="notificationToggle">
+                    <span>🔔</span>
+                </div>
+                <div class="menu-toggle hidden" id="menuToggle">
+                    <span>&#9776;</span>
+                </div>
+            </div>
+
+            <div class="notification-menu" id="notificationMenu">
+                <div class="notification-header">Thông báo</div>
+                <div class="divider"></div>
+                <a href="#" class="notification-item">Xem tất cả thông báo</a>
+            </div>
+
+            <div class="dropdown-menu" id="myDropdown">
+                <a href="/" class="menu-item" id="menuHome">Trang chủ</a>
+                <a href="#" class="menu-item logout-item hidden" id="logoutBtn">Đăng xuất</a>
+            </div>
+        </nav>
+    </header>
+     <main>
+        <div class="settings-container">
+            <div class="settings-sidebar">
+                <a href="#profile" class="sidebar-item active" data-target="profile">
+                    <i class="fas fa-user"></i> Quản Lý Thông Tin
+                </a>
+                <a href="#password" class="sidebar-item" data-target="password">
+                    <i class="fas fa-lock"></i> Đổi Mật Khẩu
+                </a>
+                <a href="#notifications" class="sidebar-item" data-target="notifications">
+                    <i class="fas fa-bell"></i> Tùy Chỉnh Thông Báo
+                </a>
+                <a href="#data" class="sidebar-item" data-target="data">
+                    <i class="fas fa-database"></i> Quản Lý Dữ Liệu
+                </a>
+            </div>
+
+            <div class="settings-content">
+
+                <section id="profile" class="content-section active">
+                    <h2 class="section-title">Quản Lý Thông Tin Cá Nhân</h2>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="fullName">Họ và Tên</label>
+                            <input type="text" id="fullName">
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Ngày Sinh</label>
+                            <input type="date" id="dob">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Giới Tính</label>
+                            <select id="gender" required>
+                                <option value="male">Nam</option>
+                                <option value="female">Nữ</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email (Không thể thay đổi)</label>
+                            <input type="email" id="email" >
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số Điện Thoại</label>
+                            <input type="tel" id="phone"  pattern="[0-9]{10}" title="Số điện thoại gồm 10 chữ số" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">Địa Chỉ</label>
+                             <input type="text" id="address">
+                        </div>
+
+
+                        <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Cập Nhật Thông Tin</button>
+                    </form>
+                    <div id="profileMessage" class="info-message"></div>
+                </section>
+
+                <section id="password" class="content-section">
+                    <h2 class="section-title">Đổi Mật Khẩu</h2>
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label for="currentPassword">Mật Khẩu Hiện Tại</label>
+                            <input type="password" id="currentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Mật Khẩu Mới</label>
+                            <input type="password" id="newPassword" required pattern=".{6,}" title="Mật khẩu phải có ít nhất 6 ký tự">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Xác Nhận Mật Khẩu Mới</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+
+                        <button type="submit" class="btn-submit"><i class="fas fa-key"></i> Đổi Mật Khẩu</button>
+                    </form>
+                    <a href="#" class="forgot-password-link" onclick="handleForgotPassword(event)">
+                        <i class="fas fa-question-circle"></i> Quên Mật Khẩu?
+                    </a>
+                    <div id="passwordMessage" class="info-message"></div>
+                </section>
+
+                <section id="notifications" class="content-section">
+                    <h2 class="section-title">Tùy Chỉnh Nhận Thông Báo</h2>
+
+                    <div class="notification-setting">
+                        <div class="setting-info">
+                            <h4>Thông báo Đơn hàng</h4>
+                            <p>Nhận thông báo khi đơn hàng được đặt, chuẩn bị và giao.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked id="notiOrder">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-setting">
+                        <div class="setting-info">
+                            <h4>Thông báo Khuyến mãi</h4>
+                            <p>Cập nhật về các ưu đãi và mã giảm giá mới nhất.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="notiPromo">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-setting">
+                        <div class="setting-info">
+                            <h4>Thông báo Hệ thống</h4>
+                            <p>Cảnh báo bảo trì hoặc cập nhật dịch vụ quan trọng.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked id="notiSystem">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <button class="btn-submit" onclick="saveNotificationSettings()"><i class="fas fa-bell"></i> Lưu Tùy Chỉnh Thông Báo</button>
+                    <div id="notificationMessage" class="info-message"></div>
+                </section>
+
+                <section id="data" class="content-section">
+                    <h2 class="section-title">Quản Lý Dữ Liệu & Tài Khoản</h2>
+                    <p style="margin-bottom: 20px;">
+                        Bạn có thể yêu cầu xóa dữ liệu cá nhân hoặc toàn bộ tài khoản. Thao tác này không thể hoàn tác.
+                    </p>
+
+                    <button class="btn-submit" style="background-color: var(--color-error);" onclick="confirmAccountDeletion()">
+                        <i class="fas fa-trash-alt"></i> Yêu Cầu Xóa Tài Khoản
+                    </button>
+                    <div id="dataMessage" class="info-message"></div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 FastKitchen. Khởi đầu mới.</p>
+    </footer>
+    <script src="../js/setting.js"></script>
+</body>
+</html>

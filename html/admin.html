@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị Viên - FastKitchen</title>
+    <link rel="stylesheet" href="../css/admin.css">
+<body>
+
+    <header>
+        <nav class="navbar">
+            
+            <div class="nav-left">
+                <div class="brand-wrap"> 
+                    <span class="logo-emoji">👨🏼‍🍳</span>
+                    <span class="brand-name">FastKitchen Admin</span>
+                </div>
+            </div>
+
+            <div class="nav-right">
+
+                <div class="notification-toggle hidden" id="notificationToggle">
+                    <span>🔔</span>
+                </div>
+                <div class="menu-toggle hidden" id="menuToggle">
+                    <span>&#9776;</span>
+                </div>
+            </div>
+
+            <div class="notification-menu" id="notificationMenu">
+                <div class="notification-header">Thông báo</div>
+                <a href="#" class="notification-item">Yêu cầu khiếu nại mới</a>
+                <a href="#" class="notification-item">Báo cáo doanh thu hôm nay</a>
+                <div class="divider"></div>
+                <a href="#" class="notification-item">Xem tất cả thông báo</a>
+            </div>
+
+            <div class="dropdown-menu" id="myDropdown">
+                <a href="/" class="menu-item" id="menuHome">Trang chủ Khách hàng</a> 
+                <a href="#" class="menu-item hidden" id="menuServiceRegister">Đăng ký dịch vụ</a>
+                <a href="#" class="menu-item hidden" id="menuYourService">Dịch vụ của bạn</a>
+                <a href="#" class="menu-item">Cài đặt Admin</a> 
+                <a href="#" class="menu-item logout-item hidden" id="logoutBtn">Đăng xuất</a>
+            </div>
+        </nav>
+    </header>
+    <div id="dashboard-container">
+        <aside id="sidebar">
+            <div class="logo">
+                <h3>Admin Tools</h3>
+            </div>
+            <nav>
+                <ul id="admin-menu">
+                    <li onclick="loadModule('overview')" class="active"><i class="fas fa-tachometer-alt"></i> Tổng Quan</li>
+                    <li onclick="loadModule('users')"><i class="fas fa-users"></i> Quản lý Tài khoản</li>
+                    <li onclick="loadModule('posts')"><i class="fas fa-file-alt"></i> Quản lý Bài đăng</li>
+                    <li onclick="loadModule('transactions')"><i class="fas fa-money-check-alt"></i> Quản lý Giao dịch</li>
+                    <li onclick="loadModule('complaints')"><i class="fas fa-exclamation-triangle"></i> Quản lý Khiếu nại</li>
+                    <li onclick="loadModule('reports')"><i class="fas fa-chart-bar"></i> Báo cáo Thống kê</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main id="main-content-admin">
+            <section id="content-area">
+                <h2>Chào mừng Admin!</h2>
+                <p>Chọn một mục từ thanh điều hướng bên trái để bắt đầu quản lý.</p>
+            </section>
+        </main>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 FastKitchen Admin. Khởi đầu mới.</p>
+    </footer>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

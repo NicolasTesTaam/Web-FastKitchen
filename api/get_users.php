@@ -1,42 +1,59 @@
 <?php
+// BẮT ĐẦU SESSION
+session_start();
 
-// 1. Cấu hình CORS (Rất quan trọng để JS có thể truy cập)
-// Cho phép truy cập từ mọi nguồn gốc (*). Trong môi trường sản xuất, bạn nên giới hạn domain cụ thể.
-header("Access-Control-Allow-Origin: *");
-// Thiết lập Content-Type là JSON
+// Thiết lập Headers cho API
+header("Access-Control-Allow-Origin: *"); 
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: GET, POST");
+header("Access-Control-Allow-Credentials: true"); 
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// 2. Thiết lập thông tin kết nối Database
-$servername = "localhost";
-$username = "root"; // Thay đổi nếu bạn đã đặt mật khẩu cho root
-$password = "";     // Thay đổi nếu bạn đã đặt mật khẩu
-$dbname = "fastkitchen"; // Thay bằng tên cơ sở dữ liệu của bạn
+// THÔNG TIN KẾT NỐI DATABASE
+$host = "localhost";
+$db_name = "FASTKITCHEN"; // ĐÃ CẬP NHẬT TỪ SQL CỦA BẠN
+$username = "root"; // THAY ĐỔI
+$password = ""; // THAY ĐỔI 
 
-// 3. Kết nối với Cơ sở Dữ liệu sử dụng PDO
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
-    // Thiết lập thuộc tính lỗi để PDO ném ngoại lệ (Exception) khi có lỗi
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // 4. Chuẩn bị và Thực thi truy vấn SQL
-    $stmt = $conn->prepare("SELECT id, name, email FROM users ORDER BY id DESC");
-    $stmt->execute();
-
-    // 5. Lấy kết quả và đóng gói
-    // fetchAll(PDO::FETCH_ASSOC) trả về một mảng chứa tất cả các hàng,
-    // mỗi hàng là một mảng kết hợp (key là tên cột).
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // 6. Trả về phản hồi JSON
-    echo json_encode($result, JSON_UNESCAPED_UNICODE);
-
+    // Kết nối bằng PDO
+    // THÊM 'charset=utf8' để hỗ trợ tiếng Việt (NVARCHAR)
+    $pdo = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Thiết lập chế độ fetching là Assoc (key là tên cột)
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch(PDOException $e) {
-    // 7. Xử lý lỗi (nếu kết nối thất bại hoặc truy vấn lỗi)
-    http_response_code(500); // Thiết lập mã lỗi HTTP 500 (Internal Server Error)
-    echo json_encode(array("message" => "Lỗi kết nối hoặc truy vấn: " . $e->getMessage()), JSON_UNESCAPED_UNICODE);
+    http_response_code(500);
+    echo json_encode(["success" => false, "message" => "Lỗi kết nối CSDL: " . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    exit();
 }
 
-// Đóng kết nối (PDO tự động đóng khi script kết thúc)
-$conn = null;
+/**
+ * Hàm lấy dữ liệu JSON từ request body
+ */
+function getJsonInput() {
+    $input = file_get_contents('php://input');
+    return json_decode($input, true) ?? [];
+}
+
+/**
+ * Hàm trả về JSON Response
+ */
+function sendResponse($data, $statusCode = 200) {
+    http_response_code($statusCode);
+    // THÊM JSON_UNESCAPED_UNICODE để hỗ trợ tiếng Việt
+    echo json_encode($data, JSON_UNESCAPED_UNICODE); 
+    exit();
+}
+
+/**
+ * Hàm tạo MaND tự động (Vì logic trong SQL phức tạp, ta sẽ tạo ở PHP)
+ */
+function generateMaND($pdo, $prefix = 'ND') {
+    $stmt = $pdo->query("SELECT MAX(SUBSTRING(MaND, 3)) AS max_id FROM NguoiDung WHERE MaND LIKE '$prefix%'");
+    $maxId = $stmt->fetchColumn();
+    $nextIdNum = intval($maxId) + 1;
+    return $prefix . str_pad($nextIdNum, 3, '0', STR_PAD_LEFT);
+}
 
 ?>

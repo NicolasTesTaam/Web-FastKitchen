@@ -1,16 +1,9 @@
-﻿CREATE DATABASE FASTKITCHEN
+CREATE DATABASE FASTKITCHEN
 GO
 USE FASTKITCHEN
 GO
-USE QL_THUCHI
-GO
-DROP DATABASE FASTKITCHEN
-GO
 
-
-
-
-
+SELECT * from NguoiDung
 ------------------------------------
 -- 1. CẤU TRÚC BẢNG (TABLE STRUCTURE)
 ------------------------------------

@@ -1,59 +1,65 @@
 <?php
-// BẮT ĐẦU SESSION
-session_start();
+include 'config.php';
 
-// Thiết lập Headers cho API
-header("Access-Control-Allow-Origin: *"); 
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: GET, POST");
-header("Access-Control-Allow-Credentials: true"); 
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+$data = getJsonInput();
 
-// THÔNG TIN KẾT NỐI DATABASE
-$host = "localhost";
-$db_name = "fastkitchen"; // ĐÃ CẬP NHẬT TỪ SQL CỦA BẠN
-$username = "root"; // THAY ĐỔI
-$password = ""; // THAY ĐỔI 
+// 1. Kiểm tra đầu vào
+if (empty($data['email']) || empty($data['password'])) {
+    sendResponse(["success" => false, "message" => "Vui lòng cung cấp email và mật khẩu."], 400);
+}
+
+// BỔ SUNG: Giả định bạn đã thêm trường HoTen (fullName) vào form Đăng ký
+$hoTen = $data['fullName'] ?? 'Khách hàng mới'; 
+$email = trim($data['email']);
+$password = $data['password'];
+$sdt = $data['phone'] ?? null;
+$cccd = $data['cccd'] ?? null;
+
+// 2. Hash mật khẩu (BẢO MẬT BẮT BUỘC)
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 try {
-    // Kết nối bằng PDO
-    // THÊM 'charset=utf8' để hỗ trợ tiếng Việt (NVARCHAR)
-    $pdo = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // Thiết lập chế độ fetching là Assoc (key là tên cột)
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-} catch(PDOException $e) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Lỗi kết nối CSDL: " . $e->getMessage()], JSON_UNESCAPED_UNICODE);
-    exit();
-}
+    // 3. Kiểm tra email đã tồn tại (dùng truy vấn thay vì SP để kiểm tra nhanh)
+    $stmt = $pdo->prepare("SELECT MaND FROM NguoiDung WHERE Email = ?");
+    $stmt->execute([$email]);
+    if ($stmt->fetch()) {
+        sendResponse(["success" => false, "message" => "Email đã được đăng ký."], 409);
+    }
+    
+    // 4. Tạo MaND mới (Sử dụng hàm generateId mới)
+    $newMaND = generateId($pdo, 'NguoiDung', 'MaND', 'ND'); // Dùng generateId mới
 
-/**
- * Hàm lấy dữ liệu JSON từ request body
- */
-function getJsonInput() {
-    $input = file_get_contents('php://input');
-    return json_decode($input, true) ?? [];
-}
+    // 5. Gọi Stored Procedure Proc_DangKyTaiKhoan
+    $stmt = $pdo->prepare("CALL Proc_DangKyTaiKhoan(?, ?, ?, ?, ?,?)");
+    
+    // MatKhau trong DB sẽ là HASHED password
+    $stmt->execute([
+        $hoTen, 
+        $email, 
+        $hashedPassword, // TRUYỀN HASHED PASSWORD
+        $sdt, 
+        $cccd,
+        $newMaND // TRUYỀN ID TỰ TẠO
+    ]);
+    
+    // Lấy kết quả từ Stored Procedure
+    $result = $stmt->fetch();
+    
+    if ($result && isset($result['MaNDMoi'])) {
+        // 6. Thiết lập Session
+        $_SESSION['MaND'] = $newMaND; 
 
-/**
- * Hàm trả về JSON Response
- */
-function sendResponse($data, $statusCode = 200) {
-    http_response_code($statusCode);
-    // THÊM JSON_UNESCAPED_UNICODE để hỗ trợ tiếng Việt
-    echo json_encode($data, JSON_UNESCAPED_UNICODE); 
-    exit();
-}
+        sendResponse([
+            "success" => true, 
+            "message" => $result['ThongBao'] ?? "Đăng ký thành công.", 
+            "userId" => $newMaND // TRẢ VỀ MaND
+        ]);
+    } else {
+        // Trường hợp Stored Procedure không trả về đúng kết quả (Lỗi do SP)
+         sendResponse(["success" => false, "message" => "Lỗi thực thi Stored Procedure: " . ($result['ThongBao'] ?? 'Không rõ.')], 500);
+    }
 
-/**
- * Hàm tạo MaND tự động (Vì logic trong SQL phức tạp, ta sẽ tạo ở PHP)
- */
-function generateMaND($pdo, $prefix = 'ND') {
-    $stmt = $pdo->query("SELECT MAX(SUBSTRING(MaND, 3)) AS max_id FROM NguoiDung WHERE MaND LIKE '$prefix%'");
-    $maxId = $stmt->fetchColumn();
-    $nextIdNum = intval($maxId) + 1;
-    return $prefix . str_pad($nextIdNum, 3, '0', STR_PAD_LEFT);
+} catch (PDOException $e) {
+    sendResponse(["success" => false, "message" => "Lỗi CSDL: " . $e->getMessage()], 500);
 }
-
 ?>

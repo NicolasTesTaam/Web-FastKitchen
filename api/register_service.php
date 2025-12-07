@@ -21,8 +21,8 @@ $maGiayXacNhanATVSTP = $data['MaGiayXacNhanATVSTP'] ?? null;
 $taiKhoanNganHang = $data['TaiKhoanNganHang'] ?? null;
 
 try {
-    // 2. Tạo MaDV mới (Sử dụng hàm tự tạo, thay vì MaND)
-    $newMaDV = generateMaND($pdo, 'DV'); 
+    // 2. Tạo MaDV mới (Sử dụng hàm generateId mới)
+    $newMaDV = generateId($pdo, 'Dichvucanhan', 'MaDV', 'DV'); // Dùng generateId mới
 
     // 3. Gọi Stored Procedure Proc_DangKyMoDichVu
     $stmt = $pdo->prepare("CALL Proc_DangKyMoDichVu(?, ?, ?, ?, ?, ?)");

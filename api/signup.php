@@ -26,12 +26,11 @@ try {
         sendResponse(["success" => false, "message" => "Email đã được đăng ký."], 409);
     }
     
-    // 4. Tạo MaND mới (Sử dụng hàm tự tạo)
-    $newMaND = generateMaND($pdo, 'ND');
+    // 4. Tạo MaND mới (Sử dụng hàm generateId mới)
+    $newMaND = generateId($pdo, 'NguoiDung', 'MaND', 'ND'); // Dùng generateId mới
 
     // 5. Gọi Stored Procedure Proc_DangKyTaiKhoan
-    // Chú ý: Ta phải truyền MaND và MatKhau ĐÃ HASH
-    $stmt = $pdo->prepare("CALL Proc_DangKyTaiKhoan(?, ?, ?, ?, ?, ?)");
+    $stmt = $pdo->prepare("CALL Proc_DangKyTaiKhoan(?, ?, ?, ?, ?,?)");
     
     // MatKhau trong DB sẽ là HASHED password
     $stmt->execute([
@@ -40,7 +39,7 @@ try {
         $hashedPassword, // TRUYỀN HASHED PASSWORD
         $sdt, 
         $cccd,
-        $newMaND // TRUYỀN ID TỰ TẠO (Nếu bạn sửa SP để không tự tạo ID nữa)
+        $newMaND // TRUYỀN ID TỰ TẠO
     ]);
     
     // Lấy kết quả từ Stored Procedure

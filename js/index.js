@@ -1,9 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     
+    // ====================================================================
+    // 1. CẤU HÌNH VÀ KHAI BÁO BIẾN
+    // ====================================================================
+    
     // ĐỊNH NGHĨA BASE URL CHO TẤT CẢ CÁC GỌI API
-    const API_BASE_URL = '/api'; 
-
-    // 1. KHAI BÁO CÁC PHẦN TỬ DOM
+    // VÍ DỤ: Nếu dự án của bạn là http://localhost:8888/FASTKITCHEN/
+    const API_BASE_URL = 'http://localhost:8888/FASTKITCHEN/api'; 
+    // KIỂM TRA VÀ SỬA ĐƯỜNG DẪN NÀY CHO PHÙ HỢP VỚI CẤU HÌNH LARAGON CỦA BẠN
+    
+    // Khai báo các phần tử DOM
     const toggleBtn = document.getElementById('menuToggle');
     const dropdown = document.getElementById('myDropdown');
     const notificationToggle = document.getElementById('notificationToggle');
@@ -17,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const signupForm = document.getElementById('signupForm');
     const serviceRegisterModal = document.getElementById('serviceRegisterModal');
     const serviceRegisterForm = document.getElementById('serviceRegisterForm');
-    // serviceRegisterBtn không được sử dụng trực tiếp, dùng serviceRegisterForm
     const serviceBtn = document.getElementById('serviceBtn');
     const menuHomeEl = document.getElementById('menuHome'); 
 
@@ -25,9 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let isLoggedIn = false; 
     let isServiceRegistered = false;
 
-    // --- CÁC HÀM XỬ LÝ BACKEND (API INTERACTION) ---
+    // ====================================================================
+    // 2. CÁC HÀM TIỆN ÍCH CHO API
+    // ====================================================================
 
-    // 0. Hàm chung để gửi yêu cầu POST API
+    // Hàm chung để gửi yêu cầu POST API
     async function postData(url, data) {
         const response = await fetch(url, {
             method: 'POST',
@@ -39,14 +46,17 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) {
-            throw new Error(`Lỗi HTTP: ${response.status}`);
-        }
-        
-        return response.json();
+        // Bóc tách JSON response ngay cả khi có lỗi HTTP (để lấy thông báo chi tiết từ PHP)
+        return response.json().then(data => {
+            if (!response.ok) {
+                // Ném lỗi với thông báo chi tiết từ server (data.message)
+                throw new Error(data.message || `Lỗi HTTP: ${response.status}`);
+            }
+            return data;
+        });
     }
 
-    // 0.1 Hàm cập nhật UI sau khi đăng nhập (Được gọi sau check status, login, signup)
+    // Hàm cập nhật UI sau khi đăng nhập (Được gọi sau check status, login, signup)
     function updateUIAfterLogin(isService) {
         isLoggedIn = true;
         
@@ -70,12 +80,13 @@ document.addEventListener('DOMContentLoaded', function() {
          }
     }
 
-    // 0.2 Xử lý check trạng thái khi tải trang (Gọi API: check_status.php)
+    // Xử lý check trạng thái khi tải trang (Gọi API: check_status.php)
     async function checkUserStatus() {
         try {
             const statusUrl = `${API_BASE_URL}/check_status.php`;
             const response = await fetch(statusUrl, { credentials: 'include' });
             
+            // Xử lý lỗi HTTP trước khi cố gắng đọc JSON
             if (!response.ok) { 
                 throw new Error(`Server status check failed: ${response.status}`);
             }
@@ -83,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.isLoggedIn) {
+                // Lưu ID và trạng thái từ Server vào sessionStorage
                 sessionStorage.setItem('currentUserId', data.userId); 
                 
                 if (data.isServiceRegistered) {
@@ -94,13 +106,18 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             isLoggedIn = false;
             console.error('Lỗi khi kiểm tra trạng thái người dùng:', error);
+            // Không cần alert nếu lỗi ở đây là do check status thất bại, chỉ cần giữ trạng thái là chưa đăng nhập
         }
     }
     
     // GỌI HÀM CHECK STATUS KHI TRANG TẢI
     checkUserStatus();
 
-    // 0.3 Xử lý submit form Đăng nhập (Gọi API: login.php)
+    // ====================================================================
+    // 3. XỬ LÝ SỰ KIỆN FORM (API CALLS)
+    // ====================================================================
+
+    // Xử lý submit form Đăng nhập (Gọi API: login.php)
     loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         
@@ -113,27 +130,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 password: loginPassword 
             });
 
-            if (data.success) {
-                sessionStorage.setItem('currentUserId', data.userId); 
-                if (data.isServiceRegistered) {
-                    sessionStorage.setItem('currentUserServiceId', data.serviceId); 
-                }
-
-                updateUIAfterLogin(data.isServiceRegistered);
-                loginModal.style.display = 'none';
-                checkAndRedirectToServiceSearch();
-            } else {
-                 alert(`Đăng nhập thất bại: ${data.message || 'Email hoặc mật khẩu không đúng.'}`);
+            // Nếu đến được đây, data.success là true
+            sessionStorage.setItem('currentUserId', data.userId); 
+            if (data.isServiceRegistered) {
+                sessionStorage.setItem('currentUserServiceId', data.serviceId); 
             }
+
+            updateUIAfterLogin(data.isServiceRegistered);
+            loginModal.style.display = 'none';
+            checkAndRedirectToServiceSearch();
+            alert(`Đăng nhập thành công! Chào mừng ${data.userId}.`);
+            
         } catch (error) {
-            console.error('Lỗi khi gọi API Đăng nhập:', error);
-             alert('Đã xảy ra lỗi hệ thống khi cố gắng đăng nhập.');
+             alert(`Đăng nhập thất bại: ${error.message}`);
+             console.error('Lỗi khi gọi API Đăng nhập:', error);
         }
     });
 
-    // 0.4 Xử lý submit form Đăng ký (Gọi API: signup.php)
+    // Xử lý submit form Đăng ký (Gọi API: signup.php)
     signupForm.addEventListener('submit', async function(event) {
         event.preventDefault();
+        
+        // Lấy giá trị từ form (BỔ SUNG: HoTen/fullName)
+        const fullName = document.getElementById('signupName').value; // SỬA ID NÀY NẾU KHÔNG PHẢI 'signupName'
         const email = document.getElementById('signupEmail').value;
         const password = document.getElementById('signupPassword').value;
         const confirm = document.getElementById('signupConfirm').value;
@@ -145,28 +164,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
         try {
             const data = await postData(`${API_BASE_URL}/signup.php`, {
+                fullName: fullName, 
                 email: email,
                 password: password
             });
 
-            if (data.success) {
-                sessionStorage.setItem('currentUserId', data.userId);
-                
-                updateUIAfterLogin(false); // Chưa đăng ký dịch vụ
-                signupModal.style.display = 'none';
-                alert('Đăng ký thành công! Bạn đã được đăng nhập.');
-                checkAndRedirectToServiceSearch();
-            } else {
-                alert(`Đăng ký thất bại: ${data.message || 'Email đã được đăng ký hoặc lỗi khác.'}`);
-            }
+            // Nếu đến được đây, data.success là true
+            sessionStorage.setItem('currentUserId', data.userId); // LƯU ID TỪ SERVER
+            
+            updateUIAfterLogin(false); // Chưa đăng ký dịch vụ
+            signupModal.style.display = 'none';
+            alert(`Đăng ký thành công! Bạn đã được đăng nhập với ID: ${data.userId}`);
+            checkAndRedirectToServiceSearch();
+            
         } catch (error) {
+            alert(`Đăng ký thất bại: ${error.message}`);
             console.error('Lỗi khi gọi API Đăng ký:', error);
-             alert('Đã xảy ra lỗi hệ thống khi cố gắng đăng ký.');
         }
     });
 
 
-    // 0.5 Xử lý đăng xuất (Gọi API: logout.php)
+    // Xử lý đăng xuất (Gọi API: logout.php)
     logoutBtn.addEventListener('click', async function(event) {
         event.preventDefault();
         
@@ -175,42 +193,37 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isConfirmed) {
             try {
                 // GỌI API ĐỂ XÓA SESSION TRÊN SERVER
-                const data = await postData(`${API_BASE_URL}/logout.php`, {});
+                await postData(`${API_BASE_URL}/logout.php`, {});
 
-                if (data.success) {
-                    isLoggedIn = false;
+                // Reset trạng thái cục bộ và UI
+                isLoggedIn = false;
+                sessionStorage.removeItem('currentUserId'); 
+                sessionStorage.removeItem('currentUserServiceId'); 
+                isServiceRegistered = false;
+
+                loginBtn.classList.remove('hidden');
+                signupBtn.classList.remove('hidden');
+                notificationToggle.classList.add('hidden');
+                toggleBtn.classList.add('hidden');
+                logoutBtn.classList.add('hidden');
+                dropdown.classList.remove('show');
+                notificationMenu.classList.remove('show');
+            
+                const serviceRegisterMenuItem = document.getElementById('menuServiceRegister');
+                const yourServiceMenuItem = document.getElementById('menuYourService');
+                if (serviceRegisterMenuItem) serviceRegisterMenuItem.classList.remove('hidden');
+                if (yourServiceMenuItem) yourServiceMenuItem.classList.add('hidden');
                     
-                    // Dọn dẹp trạng thái cục bộ sau khi server xác nhận đăng xuất
-                    sessionStorage.removeItem('currentUserId'); 
-                    sessionStorage.removeItem('currentUserServiceId'); 
-                    isServiceRegistered = false;
-
-                    // Reset UI
-                    loginBtn.classList.remove('hidden');
-                    signupBtn.classList.remove('hidden');
-                    notificationToggle.classList.add('hidden');
-                    toggleBtn.classList.add('hidden');
-                    logoutBtn.classList.add('hidden');
-                    dropdown.classList.remove('show');
-                    notificationMenu.classList.remove('show');
+                window.location.href = "/"; // Quay về trang chủ
                 
-                    const serviceRegisterMenuItem = document.getElementById('menuServiceRegister');
-                    const yourServiceMenuItem = document.getElementById('menuYourService');
-                    if (serviceRegisterMenuItem) serviceRegisterMenuItem.classList.remove('hidden');
-                    if (yourServiceMenuItem) yourServiceMenuItem.classList.add('hidden');
-                        
-                    window.location.href = "/";
-                } else {
-                    alert(`Đăng xuất thất bại: ${data.message || 'Lỗi server.'}`);
-                }
             } catch (error) {
+                alert(`Đăng xuất thất bại: ${error.message}`);
                 console.error('Lỗi khi gọi API Đăng xuất:', error);
-                alert('Đã xảy ra lỗi hệ thống khi cố gắng đăng xuất.');
             }
         }
     });
 
-    // 0.6 Xử lý submit form Đăng ký dịch vụ (Gọi API: register_service.php)
+    // Xử lý submit form Đăng ký dịch vụ (Gọi API: register_service.php)
     if (serviceRegisterForm) {
         serviceRegisterForm.addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -221,73 +234,72 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Lấy dữ liệu từ form Đăng ký dịch vụ ở đây
+            // Lấy dữ liệu từ form Đăng ký dịch vụ
             const serviceData = {
-                userId: userId,
-                // Vui lòng thêm các trường dữ liệu cần gửi đi từ form ĐKDV của bạn
-                // Ví dụ: serviceName: document.getElementById('serviceName').value, 
+                // MaND đã được gửi qua session/cookie
+                MaSoThue: document.getElementById('serviceMaSoThue').value, // SỬA ID NẾU KHÁC
+                DiaChi: document.getElementById('serviceDiaChi').value,       // SỬA ID NẾU KHÁC
+                // Thêm các trường khác cần thiết cho Proc_DangKyMoDichVu
             };
 
             try {
                 // GỌI API ĐỂ ĐĂNG KÝ DỊCH VỤ TRÊN SERVER
                 const data = await postData(`${API_BASE_URL}/register_service.php`, serviceData);
 
-                if (data.success) {
-                    isServiceRegistered = true;
-                    sessionStorage.setItem('currentUserServiceId', data.serviceId); // LƯU ID DỊCH VỤ TỪ SERVER
+                // Nếu thành công
+                isServiceRegistered = true;
+                sessionStorage.setItem('currentUserServiceId', data.serviceId); // LƯU ID DỊCH VỤ TỪ SERVER
 
-                    // Cập nhật UI
-                    const serviceRegisterMenuItem = document.getElementById('menuServiceRegister');
-                    const yourServiceMenuItem = document.getElementById('menuYourService');
+                // Cập nhật UI
+                const serviceRegisterMenuItem = document.getElementById('menuServiceRegister');
+                const yourServiceMenuItem = document.getElementById('menuYourService');
 
-                    if (serviceRegisterMenuItem) serviceRegisterMenuItem.classList.add('hidden');
-                    if (yourServiceMenuItem) yourServiceMenuItem.classList.remove('hidden');
+                if (serviceRegisterMenuItem) serviceRegisterMenuItem.classList.add('hidden');
+                if (yourServiceMenuItem) yourServiceMenuItem.classList.remove('hidden');
 
-                    serviceRegisterModal.style.display = 'none';
-                    alert(`Đăng ký dịch vụ thành công! Service ID của bạn là: ${data.serviceId}`);
-                } else {
-                    alert(`Đăng ký dịch vụ thất bại: ${data.message || 'Lỗi server.'}`);
-                }
+                serviceRegisterModal.style.display = 'none';
+                alert(`Đăng ký dịch vụ thành công! Service ID của bạn là: ${data.serviceId}`);
+                
             } catch (error) {
+                alert(`Đăng ký dịch vụ thất bại: ${error.message}`);
                 console.error('Lỗi khi gọi API Đăng ký dịch vụ:', error);
-                alert('Đã xảy ra lỗi hệ thống khi cố gắng đăng ký dịch vụ.');
             }
         });
     }
 
-    // --- CÁC SỰ KIỆN XỬ LÝ UI/UX KHÁC (Đã được sắp xếp lại) ---
-
-    // 1. Mở Modal Đăng nhập (khi click nút đăng nhập)
+    // ====================================================================
+    // 4. XỬ LÝ SỰ KIỆN UI/UX
+    // ====================================================================
+    
+    // Mở Modal Đăng nhập (khi click nút đăng nhập)
     loginBtn.addEventListener('click', function(event) {
         event.preventDefault();
         loginModal.style.display = 'block';
     });
 
-    // 2. Mở Modal Đăng ký (khi click nút đăng ký)
+    // Mở Modal Đăng ký (khi click nút đăng ký)
     signupBtn.addEventListener('click', function(event) {
         event.preventDefault();
         signupModal.style.display = 'block';
     });
 
-    // 3. Xử lý click vào "Đăng ký dịch vụ" trong menu
+    // Xử lý click vào "Đăng ký dịch vụ" trong menu
     const serviceRegisterMenuItemEl = document.getElementById('menuServiceRegister');
     if (serviceRegisterMenuItemEl) {
         serviceRegisterMenuItemEl.addEventListener('click', function(event) {
             event.preventDefault();
             if (!isLoggedIn) {
-                // Nếu chưa đăng nhập, mở modal Đăng nhập và lưu trạng thái chuyển hướng
                 loginModal.style.display = 'block';
                 sessionStorage.setItem('redirectAfterLogin', 'serviceProviderRegister');
                 return;
             }
             if (serviceRegisterModal) {
-                // Nếu đã đăng nhập, mở modal Đăng ký dịch vụ
                 serviceRegisterModal.style.display = 'block';
             }
         });
     }
 
-    // 4. Xử lý click vào "Dịch vụ của bạn" trong menu
+    // Xử lý click vào "Dịch vụ của bạn" trong menu
     const yourServiceMenuItemEl = document.getElementById('menuYourService');
     if (yourServiceMenuItemEl) {
         yourServiceMenuItemEl.addEventListener('click', function(event) {
@@ -303,12 +315,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 5. Xử lý click vào nút "Đặt dịch vụ" chính (serviceBtn) - Chuyển đến trang tìm kiếm
+    // Xử lý click vào nút "Đặt dịch vụ" chính (serviceBtn) - Chuyển đến trang tìm kiếm
     if (serviceBtn) {
         serviceBtn.addEventListener('click', function(event) {
             event.preventDefault();
             if (!isLoggedIn) {
-                // Nếu chưa đăng nhập, mở modal Đăng nhập và lưu trạng thái chuyển hướng
                 loginModal.style.display = 'block';
                 sessionStorage.setItem('redirectAfterLogin', 'serviceSearch');
                 return;
@@ -317,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 6. Xử lý click vào "Trang chủ" trong menu
+    // Xử lý click vào "Trang chủ" trong menu
     if (menuHomeEl) {
         menuHomeEl.addEventListener('click', function(event) {
             event.preventDefault(); 
@@ -326,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 7. Xử lý Toggle Menu (Hamburger)
+    // Xử lý Toggle Menu (Hamburger)
     if (toggleBtn) {
         toggleBtn.addEventListener('click', function(event) {
             event.stopPropagation(); 
@@ -335,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 8. Xử lý Toggle Thông báo (Notification Bell)
+    // Xử lý Toggle Thông báo (Notification Bell)
     if (notificationToggle) {
         notificationToggle.addEventListener('click', function(event) {
             event.stopPropagation();
@@ -344,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 9. Đóng Menu/Thông báo khi click bất kỳ đâu bên ngoài
+    // Đóng Menu/Thông báo khi click bất kỳ đâu bên ngoài
     document.addEventListener('click', function(event) {
         if (dropdown && !dropdown.contains(event.target) && toggleBtn && !toggleBtn.contains(event.target)) {
             dropdown.classList.remove('show');
@@ -354,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 10. Đóng Modal khi click ngoài (window click)
+    // Đóng Modal khi click ngoài (window click)
     window.addEventListener('click', function(event) {
         if (loginModal && event.target === loginModal) {
             loginModal.style.display = 'none';
@@ -369,7 +380,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // --- CÁC HÀM TIỆN ÍCH ---
+    // ====================================================================
+    // 5. CÁC HÀM CHUYỂN HƯỚNG VÀ XỬ LÝ MODAL (TOÀN CỤC)
+    // ====================================================================
 
     // Hàm chuyển đến trang tìm kiếm dịch vụ
     function redirectToServiceSearch() {
@@ -395,8 +408,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// --- CÁC HÀM ĐÓNG MODAL (Nếu bạn gọi từ nút "X" trong HTML) ---
-
+// Các hàm đóng modal (Được gọi từ HTML)
 function closeLoginModal() {
     const loginModal = document.getElementById('loginModal');
     if (loginModal) {
